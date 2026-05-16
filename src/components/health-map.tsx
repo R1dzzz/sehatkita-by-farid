@@ -109,11 +109,29 @@ export default function HealthMap({
 }: HealthMapProps) {
   const center = useMemo(() => {
     if (selectedFacility) {
-      return [selectedFacility.latitude, selectedFacility.longitude];
+      return [
+        parseFloat(String(selectedFacility.latitude)),
+        parseFloat(String(selectedFacility.longitude)),
+      ];
     }
-    // Default to Surabaya center
-    return [-7.28, 112.75];
-  }, [selectedFacility]);
+    // Calculate average center from all facilities in the database
+    if (facilities.length > 0) {
+      const validFacilities = facilities.filter(
+        (f) => !isNaN(parseFloat(String(f.latitude))) && !isNaN(parseFloat(String(f.longitude)))
+      );
+      if (validFacilities.length > 0) {
+        const avgLat =
+          validFacilities.reduce((sum, f) => sum + parseFloat(String(f.latitude)), 0) /
+          validFacilities.length;
+        const avgLng =
+          validFacilities.reduce((sum, f) => sum + parseFloat(String(f.longitude)), 0) /
+          validFacilities.length;
+        return [avgLat, avgLng];
+      }
+    }
+    // Fallback: Indonesia geographic center (not Surabaya)
+    return [-2.5, 118.0];
+  }, [selectedFacility, facilities]);
 
   return (
     <MapContainer
@@ -127,18 +145,22 @@ export default function HealthMap({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <MapUpdater selectedFacility={selectedFacility} />
-      {facilities.map((facility) => (
-        <Marker
-          key={facility.id}
-          position={[facility.latitude, facility.longitude]}
-          icon={getIconForType(
-            facility.type,
-            selectedFacility?.id === facility.id
-          )}
-          eventHandlers={{
-            click: () => onSelectFacility(facility),
-          }}
-        >
+      {facilities.map((facility) => {
+        const lat = parseFloat(String(facility.latitude));
+        const lng = parseFloat(String(facility.longitude));
+        if (isNaN(lat) || isNaN(lng)) return null;
+        return (
+          <Marker
+            key={facility.id}
+            position={[lat, lng]}
+            icon={getIconForType(
+              facility.type,
+              selectedFacility?.id === facility.id
+            )}
+            eventHandlers={{
+              click: () => onSelectFacility(facility),
+            }}
+          >
           <Popup>
             <div className="p-2 min-w-[200px]">
               <h3 className="font-semibold text-base">{facility.name}</h3>
@@ -181,8 +203,9 @@ export default function HealthMap({
               </div>
             </div>
           </Popup>
-        </Marker>
-      ))}
+          </Marker>
+        );
+      })}
     </MapContainer>
   );
 }
