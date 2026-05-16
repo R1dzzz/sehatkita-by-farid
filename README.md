@@ -1,129 +1,174 @@
-```markdown
-# SehatKita - Platform Kesehatan Keluarga
+# 🩺 SehatKita
 
-![SehatKita](https://img.shields.io/badge/Next.js-14.2-black?style=flat&logo=next.js)
-![Supabase](https://img.shields.io/badge/Supabase-3.45-green?style=flat&logo=supabase)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css)
+<p align="center">
+  Platform Kesehatan Keluarga berbasis web untuk membantu monitoring kesehatan keluarga Indonesia.
+</p>
 
-**Website:** [sehatkita-farid.vercel.app](https://sehatkita-farid.vercel.app)
-
-SehatKita adalah platform kesehatan keluarga berbasis web yang dirancang untuk membantu masyarakat Indonesia, khususnya di Kabupaten Kebumen, Jawa Tengah, dalam memantau dan mengelola kesehatan keluarga dengan lebih mudah dan terorganisir.
-
----
-
-## ✨ Fitur Utama
-
-- **Manajemen Profil Keluarga** — Tambah dan kelola data kesehatan seluruh anggota keluarga
-- **Reminder Cerdas** — Pengingat imunisasi, minum obat, dan jadwal kontrol kesehatan
-- **Symptom Checker** — Cek gejala sederhana dengan rekomendasi awal
-- **Risk Assessment** — Penilaian risiko diabetes, hipertensi, dan stunting
-- **Peta Fasilitas Kesehatan** — Lokasi RS, Puskesmas, dan Apotek di Kabupaten Kebumen
-- **Edukasi Kesehatan** — Artikel dan konten edukasi kesehatan yang mudah dipahami
-- **Laporan Bulanan** — Ringkasan kesehatan keluarga
-- **Autentikasi** — Login Email & Google (Mobile & Desktop Friendly)
+<p align="center">
+  <img src="https://img.shields.io/badge/version-1.5.0-blue.svg" />
+  <img src="https://img.shields.io/badge/license-MIT-green.svg" />
+  <img src="https://img.shields.io/badge/deployment-Vercel-black.svg" />
+  <img src="https://img.shields.io/badge/Next.js-14-black?logo=next.js" />
+  <img src="https://img.shields.io/badge/Supabase-green?logo=supabase" />
+  <img src="https://img.shields.io/badge/TypeScript-blue?logo=typescript" />
+</p>
 
 ---
 
-## 🛠️ Tech Stack
+## 🌐 Live Demo
 
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS + shadcn/ui
-- **Database & Auth**: Supabase
-- **Mapping**: Leaflet.js + react-leaflet
-- **Deployment**: Vercel
-- **State Management**: React Hooks + Supabase Realtime
+**Website:** https://sehatkita-farid.vercel.app
+
+**Deployment Platform:** Vercel  
+**Current Version:** `v1.5.0`
 
 ---
 
-## 🚀 Deployment
+## 📌 About Project
 
-**Live Demo:** [https://sehatkita-farid.vercel.app](https://sehatkita-farid.vercel.app)
+SehatKita adalah platform kesehatan keluarga berbasis web yang dirancang untuk membantu masyarakat Indonesia memantau kesehatan anggota keluarga, mengelola reminder medis, melakukan symptom checking, serta menemukan fasilitas kesehatan terdekat.
 
-**Versi Saat Ini**: `1.5.0`  
-**Deployment Terakhir**: May 17, 2026
+Project ini dibuat sebagai solusi digital health modern dengan integrasi database real-time menggunakan Supabase.
 
 ---
 
-## 📂 Struktur Project
+## ✨ Features
+
+- 👨‍👩‍👧‍👦 Family Health Management
+- ⏰ Smart Reminder (Obat, Imunisasi, Checkup)
+- 🤒 Symptom Checker berbasis database
+- 📊 Risk Assessment
+- 🏥 Health Facility Map
+- 📚 Health Education Articles
+- 🔐 Authentication (Email & Google Login)
+- 📱 Responsive UI
+
+---
+
+## 🛠 Tech Stack
+
+| Category | Technology |
+|---|---|
+| Framework | Next.js 14 |
+| Language | TypeScript |
+| Styling | Tailwind CSS + shadcn/ui |
+| Database | Supabase |
+| Authentication | Supabase Auth |
+| Maps | Leaflet.js |
+| Deployment | Vercel |
+
+---
+
+## 📂 Project Structure
 
 ```bash
 src/
-├── app/                 # Next.js App Router
-├── components/          # Reusable Components
-├── hooks/               # Custom React Hooks
-├── lib/                 # Supabase client & utilities
-├── types/               # TypeScript definitions
-└── sections/            # Landing page sections
+├── app/
+├── components/
+├── hooks/
+├── lib/
+├── types/
+└── sections/
 ```
 
 ---
 
-## 👥 Anggota Kelompok
+## 🚀 Installation
 
-| No | Nama                  | Absen | Peran                          |
-|----|-----------------------|-------|--------------------------------|
-| 1  | Farid Alfiyansah      | 26    | Project Manager & Frontend     |
-| 2  | Halim                 | 31    | Backend & Database             |
-| 3  | Fauzan Yusuf          | 27    | UI/UX Designer                 |
-| 4  | Devino Bintang        | 5     | Full Stack Developer           |
-| 5  | Denis Alfarizi        | 4     | QA & Testing                   |
-| 6  | Eka Ardiansah         | 19    | Content & Documentation        |
+Clone repository:
+
+```bash
+git clone https://github.com/R1dzzz/sehatkita-farid.git
+cd sehatkita
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run development server:
+
+```bash
+npm run dev
+```
+
+Open browser:
+
+```bash
+http://localhost:3000
+```
 
 ---
 
-## 🎯 Tujuan Project
+## 🔑 Environment Variables
 
-- Membantu keluarga Indonesia dalam mengelola kesehatan secara preventif
-- Meningkatkan kesadaran kesehatan masyarakat
-- Memudahkan akses informasi fasilitas kesehatan terdekat
-- Memberikan edukasi kesehatan yang mudah dipahami oleh semua kalangan
+Create `.env.local`
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key
+```
+
+---
+
+## 🗺 Roadmap
+
+- [x] Landing Page
+- [x] Authentication
+- [x] Health Records
+- [x] Symptom Checker
+- [x] Risk Assessment
+- [x] Facility Maps
+- [ ] AI Health Recommendation
+- [ ] Doctor Consultation Integration
+
+---
+
+## 👥 Team
+
+| Name | Role |
+|---|---|
+| Farid Alfiyansah | Project Manager & Frontend |
+| Halim | Backend & Database |
+| Fauzan Yusuf | UI/UX |
+| Devino Bintang | Full Stack |
+| Denis Alfarizi | QA Testing |
+| Eka Ardiansah | Documentation |
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome.
+
+1. Fork repository
+2. Create feature branch
+3. Commit changes
+4. Push branch
+5. Open Pull Request
 
 ---
 
 ## 📄 License
 
-Project ini dilisensikan di bawah **MIT License** - lihat file [LICENSE](LICENSE) untuk detail lebih lanjut.
+Distributed under the **MIT License**.
+
+See `LICENSE` for more information.
 
 ---
 
-## 🙏 Acknowledgments
+## 🙏 Acknowledgements
 
-- Kementerian Kesehatan Republik Indonesia
-- Dinas Kesehatan Kabupaten Kebumen
-- Supabase & Vercel
+- Supabase
+- Vercel
+- Next.js
 - shadcn/ui
+- Leaflet.js
 
 ---
 
-## 📧 Kontak
-
-Untuk pertanyaan, saran, atau kolaborasi, silakan hubungi:
-
-- **Farid Alfiyansah** (Project Manager)
-
----
-
-**Made with ❤️ for better family health in Indonesia**
-
-© 2026 SehatKita. All Rights Reserved.
-```
-
----
-
-### Cara Menggunakan:
-
-1. Copy seluruh teks di atas
-2. Buat file baru bernama `README.md` di folder project
-3. Paste
-4. Commit & push ke GitHub
-
----
-
-Mau saya tambahkan atau ubah sesuatu? Misalnya:
-- Tambah screenshot
-- Tambah cara instalasi lokal
-- Ubah versi atau tanggal
-
-Kasih tahu saja kalau ada yang ingin diubah!
+<p align="center">
+Made with ❤️ in Indonesia
+</p>
