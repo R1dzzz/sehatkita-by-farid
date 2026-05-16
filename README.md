@@ -78,8 +78,8 @@ src/
 Clone repository:
 
 ```bash
-git clone https://github.com/R1dzzz/sehatkita-farid.git
-cd sehatkita
+git clone https://github.com/R1dzzz/sehatkita-by-farid.git
+cd sehatkita-by-farid
 ```
 
 Install dependencies:
