@@ -216,9 +216,9 @@ export default function HargaPage() {
                         className={`w-full ${
                           plan.popular
                             ? "bg-gradient-to-r from-sehat-500 to-kitablue-500 text-white hover:from-sehat-600 hover:to-kitablue-600"
-                            : ""
+                            : "bg-sehat-500 text-white hover:bg-sehat-600 border-0"
                         }`}
-                        variant={plan.popular ? "default" : "outline"}
+                        variant="default"
                       >
                         {plan.monthlyPrice === 0 ? "Mulai Gratis" : "Pilih Paket"}
                       </Button>
