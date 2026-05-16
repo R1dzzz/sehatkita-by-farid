@@ -19,6 +19,7 @@ import {
   Cross,
   Search,
 } from "lucide-react";
+import { createClient } from "@/lib/supabase";
 
 // Dynamically import Leaflet components to avoid SSR issues
 const MapWithNoSSR = dynamic(() => import("@/components/health-map"), {
@@ -144,9 +145,47 @@ export default function PetaPage() {
   const [search, setSearch] = useState("");
   const [selectedFacility, setSelectedFacility] = useState<HealthFacility | null>(null);
   const [mounted, setMounted] = useState(false);
+  // Facilities loaded from Supabase (replaces hardcoded Surabaya data)
+  const [facilities, setFacilities] = useState<HealthFacility[]>([]);
+  const [loadingFacilities, setLoadingFacilities] = useState(true);
 
   useEffect(() => {
     setMounted(true);
+
+    // Fetch facilities from Supabase health_facilities table
+    const fetchFacilities = async () => {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("health_facilities")
+          .select("*")
+          .order("name", { ascending: true });
+
+        if (error) {
+          console.error("Error fetching health facilities:", error);
+          return;
+        }
+
+        if (data && data.length > 0) {
+          // Normalize data: ensure latitude/longitude are numbers, services is array
+          const normalized: HealthFacility[] = data.map((f) => ({
+            ...f,
+            latitude: parseFloat(String(f.latitude)),
+            longitude: parseFloat(String(f.longitude)),
+            rating: parseFloat(String(f.rating ?? 0)),
+            services: Array.isArray(f.services) ? f.services : [],
+            is_24h: Boolean(f.is_24h),
+          }));
+          setFacilities(normalized);
+        }
+      } catch (err) {
+        console.error("Failed to fetch facilities:", err);
+      } finally {
+        setLoadingFacilities(false);
+      }
+    };
+
+    fetchFacilities();
   }, []);
 
   const filteredFacilities = facilities.filter((f) => {
@@ -208,8 +247,20 @@ export default function PetaPage() {
 
             {/* List */}
             <div className="space-y-3">
-              {filteredFacilities.map((facility) => {
-                const config = typeConfig[facility.type];
+              {loadingFacilities ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="w-6 h-6 border-4 border-sehat-500 border-t-transparent rounded-full animate-spin" />
+                  <span className="ml-3 text-sm text-muted-foreground">Memuat data faskes...</span>
+                </div>
+              ) : filteredFacilities.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground text-sm">
+                  {facilities.length === 0
+                    ? "Tidak ada data fasilitas kesehatan."
+                    : "Tidak ada faskes yang sesuai filter."}
+                </div>
+              ) : (
+              filteredFacilities.map((facility) => {
+                const config = typeConfig[facility.type] ?? typeConfig.clinic;
                 const Icon = config.icon;
                 return (
                   <Card
@@ -267,7 +318,8 @@ export default function PetaPage() {
                     </CardContent>
                   </Card>
                 );
-              })}
+              })
+              )}
             </div>
           </div>
         </div>
