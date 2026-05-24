@@ -19,62 +19,118 @@ import {
 } from "lucide-react";
 import { useInView } from "@/hooks/use-in-view";
 
-// Team members data with randomuser.me photos
-// NOTE: Foto ini adalah placeholder dari randomuser.me.
-// Foto asli anggota kelompok akan di-upload manual oleh masing-masing anggota.
+// ============================================================
+// MUDAH DIEDIT: Data Anggota Kelompok
+// Cara ganti foto: upload file ke folder public/ lalu sesuaikan path di bawah
+// Contoh: photo: "/farid.png" → taruh farid.png di folder public/
+// ============================================================
 const teamMembers = [
   {
     id: "26",
     name: "Farid Alfiyansah",
     role: "Project Manager & Frontend Developer",
     absen: 26,
-    photo: "https://randomuser.me/api/portraits/men/32.jpg",
+    photo: "/farid.png",          // Upload foto ke: public/farid.png
     bio: "Mengoordinasikan tim dan mengembangkan antarmuka pengguna aplikasi SehatKita.",
+    type: "human" as const,
   },
   {
     id: "31",
     name: "Halim",
     role: "Backend Developer",
     absen: 31,
-    photo: "https://randomuser.me/api/portraits/men/45.jpg",
+    photo: "/halim.png",          // Upload foto ke: public/halim.png
     bio: "Bertanggung jawab atas arsitektur backend dan integrasi dengan Supabase.",
+    type: "human" as const,
   },
   {
     id: "27",
     name: "Fauzan Yusuf",
     role: "UI/UX Designer",
     absen: 27,
-    photo: "https://randomuser.me/api/portraits/men/22.jpg",
+    photo: "/fauzan.png",         // Upload foto ke: public/fauzan.png
     bio: "Mendesain pengalaman pengguna dan antarmuka yang ramah untuk semua usia.",
+    type: "human" as const,
   },
   {
     id: "5",
     name: "Devino Bintang",
     role: "Full Stack Developer",
     absen: 5,
-    photo: "https://randomuser.me/api/portraits/men/67.jpg",
+    photo: "/devino.png",         // Upload foto ke: public/devino.png
     bio: "Mengembangkan fitur-fitur utama aplikasi dari frontend hingga backend.",
+    type: "human" as const,
   },
   {
     id: "4",
     name: "Denis Alfarizi",
     role: "QA & Testing",
     absen: 4,
-    photo: "https://randomuser.me/api/portraits/women/33.jpg",
+    photo: "/denis.png",          // Upload foto ke: public/denis.png
     bio: "Memastikan kualitas aplikasi melalui pengujian menyeluruh.",
+    type: "human" as const,
   },
   {
     id: "19",
     name: "Eka Ardiansah",
     role: "Content & Documentation",
     absen: 19,
-    photo: "https://randomuser.me/api/portraits/men/55.jpg",
+    photo: "/eka.png",            // Upload foto ke: public/eka.png
     bio: "Menyusun konten edukasi kesehatan dan dokumentasi teknis aplikasi.",
+    type: "human" as const,
+  },
+];
+
+// ============================================================
+// MUDAH DIEDIT: Data Anggota AI
+// Logo diambil otomatis dari URL resmi masing-masing AI.
+// brandColor: warna fallback jika logo gagal dimuat (hex tanpa #)
+// ============================================================
+const aiMembers = [
+  {
+    id: "chatgpt",
+    name: "ChatGPT",
+    role: "AI Language Model",
+    company: "OpenAI",
+    photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/1024px-ChatGPT_logo.svg.png",
+    bio: "Membantu tim dalam brainstorming ide fitur, penulisan konten, dan debugging kode.",
+    brandColor: "10a37f",
+    type: "ai" as const,
+  },
+  {
+    id: "claude",
+    name: "Claude AI",
+    role: "AI Assistant",
+    company: "Anthropic",
+    photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Claude_AI_logo.svg/1024px-Claude_AI_logo.svg.png",
+    bio: "Mendukung pengembangan fitur, review kode, dan menyusun dokumentasi teknis proyek.",
+    brandColor: "d97757",
+    type: "ai" as const,
+  },
+  {
+    id: "grok",
+    name: "Grok",
+    role: "AI Assistant",
+    company: "xAI",
+    photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Grok_logo.svg/1024px-Grok_logo.svg.png",
+    bio: "Memberikan wawasan real-time dan analisis data untuk mendukung keputusan tim.",
+    brandColor: "1d9bf0",
+    type: "ai" as const,
+  },
+  {
+    id: "gemini",
+    name: "Gemini",
+    role: "AI Language Model",
+    company: "Google",
+    photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Google_Gemini_logo.svg/1024px-Google_Gemini_logo.svg.png",
+    bio: "Membantu riset informasi kesehatan, terjemahan, dan optimasi konten aplikasi.",
+    brandColor: "4285f4",
+    type: "ai" as const,
   },
 ];
 
 const stats = [
-  { label: "Anggota Tim", value: "6", icon: Users },
+  { label: "Anggota Tim", value: "10", icon: Users },
   { label: "Fitur Utama", value: "8+", icon: Heart },
   { label: "Tech Stack", value: "10+", icon: Target },
 ];
@@ -176,59 +232,115 @@ export default function TentangPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Tim Pengembang</h2>
             <p className="text-muted-foreground max-w-lg mx-auto">
-              Dibangun oleh tim mahasiswa yang peduli akan kesehatan keluarga
-              Indonesia.
-            </p>
-            <p className="text-xs text-muted-foreground mt-2">
-              * Foto placeholder dari randomuser.me — akan diganti dengan foto asli
+              Dibangun oleh tim siswa yang peduli akan kesehatan keluarga
+              Indonesia, dengan dukungan teknologi AI terkini.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {teamMembers.map((member, index) => (
-              <Card
-                key={member.id}
-                className={`group hover:shadow-lg transition-all duration-300 overflow-hidden ${
-                  isInView ? "animate-fade-in" : "opacity-0"
-                }`}
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <CardContent className="p-0">
-                  <div className="relative">
-                    {/* Gradient header */}
-                    <div className="h-24 bg-gradient-to-r from-sehat-400 to-kitablue-400" />
-                    {/* Avatar */}
-                    <div className="absolute -bottom-12 left-1/2 -translate-x-1/2">
-                      <div className="w-24 h-24 rounded-full border-4 border-background overflow-hidden bg-white shadow-lg">
-                        {/* PLACEHOLDER PHOTO - will be replaced with actual photos */}
-                        <img
-                          src={member.photo}
-                          alt={member.name}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            // Fallback if randomuser.me fails
-                            (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=10b981&color=fff&size=128`;
-                          }}
-                        />
+          {/* ── Anggota Kelompok ── */}
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px flex-1 bg-border" />
+              <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wider px-2">
+                Anggota Kelompok
+              </span>
+              <div className="h-px flex-1 bg-border" />
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {teamMembers.map((member, index) => (
+                <Card
+                  key={member.id}
+                  className={`group hover:shadow-lg transition-all duration-300 overflow-hidden ${
+                    isInView ? "animate-fade-in" : "opacity-0"
+                  }`}
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <CardContent className="p-0">
+                    <div className="relative">
+                      <div className="h-24 bg-gradient-to-r from-sehat-400 to-kitablue-400" />
+                      <div className="absolute -bottom-12 left-1/2 -translate-x-1/2">
+                        <div className="w-24 h-24 rounded-full border-4 border-background overflow-hidden bg-muted shadow-lg">
+                          {/* Foto: taruh file di public/<nama>.png — lihat komentar di atas */}
+                          <img
+                            src={member.photo}
+                            alt={member.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=10b981&color=fff&size=128`;
+                            }}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
+                    <div className="pt-14 pb-6 px-6 text-center">
+                      <Badge variant="secondary" className="mb-2">
+                        Absen {member.absen}
+                      </Badge>
+                      <h3 className="font-bold text-lg">{member.name}</h3>
+                      <p className="text-sm text-sehat-600 font-medium mb-2">
+                        {member.role}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {member.bio}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
 
-                  <div className="pt-14 pb-6 px-6 text-center">
-                    <Badge variant="secondary" className="mb-2">
-                      Absen {member.absen}
-                    </Badge>
-                    <h3 className="font-bold text-lg">{member.name}</h3>
-                    <p className="text-sm text-sehat-600 font-medium mb-2">
-                      {member.role}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {member.bio}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+          {/* ── Didukung oleh AI ── */}
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px flex-1 bg-border" />
+              <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wider px-2">
+                Didukung oleh AI
+              </span>
+              <div className="h-px flex-1 bg-border" />
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {aiMembers.map((member, index) => (
+                <Card
+                  key={member.id}
+                  className={`group hover:shadow-lg transition-all duration-300 overflow-hidden ${
+                    isInView ? "animate-fade-in" : "opacity-0"
+                  }`}
+                  style={{ animationDelay: `${(teamMembers.length + index) * 100}ms` }}
+                >
+                  <CardContent className="p-0">
+                    <div className="relative">
+                      <div className="h-24 bg-gradient-to-r from-slate-400 to-slate-600" />
+                      <div className="absolute -bottom-12 left-1/2 -translate-x-1/2">
+                        <div className="w-24 h-24 rounded-full border-4 border-background overflow-hidden bg-white shadow-lg flex items-center justify-center">
+                          {/* Logo resmi masing-masing AI */}
+                          <img
+                            src={member.photo}
+                            alt={`${member.name} logo`}
+                            className="w-14 h-14 object-contain"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=${member.brandColor}&color=fff&size=128`;
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="pt-14 pb-6 px-6 text-center">
+                      <Badge className="mb-2 bg-slate-100 text-slate-700 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-300">
+                        {member.company}
+                      </Badge>
+                      <h3 className="font-bold text-lg">{member.name}</h3>
+                      <p className="text-sm text-kitablue-600 font-medium mb-2">
+                        {member.role}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {member.bio}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
         </section>
 
