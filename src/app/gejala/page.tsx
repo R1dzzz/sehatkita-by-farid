@@ -274,7 +274,7 @@ export default function GejalaPage() {
                                       : "border-border hover:bg-accent"
                                   }`}
                                 >
-                                  <Checkbox checked={isSelected} readOnly />
+                                  <Checkbox checked={isSelected} disabled />
                                   <span className="text-sm">{symptom.name}</span>
                                 </button>
                               );
