@@ -126,7 +126,42 @@ CREATE TABLE IF NOT EXISTS health_facilities (
 );
 
 -- =====================================================
--- 8. EDUCATION ARTICLES TABLE
+-- 8. SYMPTOMS TABLE
+-- Store symptom data for symptom checker
+-- =====================================================
+CREATE TABLE IF NOT EXISTS symptoms (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  category TEXT NOT NULL,
+  description TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- =====================================================
+-- 9. DISEASES TABLE
+-- Store disease data for diagnosis
+-- =====================================================
+CREATE TABLE IF NOT EXISTS diseases (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  description TEXT,
+  recommendation TEXT,
+  severity TEXT CHECK (severity IN ('mild', 'moderate', 'severe')),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- =====================================================
+-- 10. DISEASE_SYMPTOMS TABLE
+-- Mapping between diseases and their symptoms
+-- =====================================================
+CREATE TABLE IF NOT EXISTS disease_symptoms (
+  disease_id UUID REFERENCES diseases(id) ON DELETE CASCADE NOT NULL,
+  symptom_id UUID REFERENCES symptoms(id) ON DELETE CASCADE NOT NULL,
+  PRIMARY KEY (disease_id, symptom_id)
+);
+
+-- =====================================================
+-- 11. EDUCATION ARTICLES TABLE
 -- Store health education content
 -- =====================================================
 CREATE TABLE IF NOT EXISTS education_articles (
@@ -141,7 +176,7 @@ CREATE TABLE IF NOT EXISTS education_articles (
 );
 
 -- =====================================================
--- 9. TEAM MEMBERS TABLE (for About Us page)
+-- 12. TEAM MEMBERS TABLE (for About Us page)
 -- =====================================================
 CREATE TABLE IF NOT EXISTS team_members (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -165,6 +200,9 @@ ALTER TABLE reminders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE symptom_checks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE risk_assessments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE health_facilities ENABLE ROW LEVEL SECURITY;
+ALTER TABLE symptoms ENABLE ROW LEVEL SECURITY;
+ALTER TABLE diseases ENABLE ROW LEVEL SECURITY;
+ALTER TABLE disease_symptoms ENABLE ROW LEVEL SECURITY;
 ALTER TABLE education_articles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
 
@@ -240,6 +278,18 @@ CREATE POLICY "Anyone can view health facilities" ON health_facilities
 CREATE POLICY "Anyone can view education articles" ON education_articles
   FOR SELECT USING (true);
 
+-- SYMPTOMS: Public read access
+CREATE POLICY "Anyone can view symptoms" ON symptoms
+  FOR SELECT USING (true);
+
+-- DISEASES: Public read access
+CREATE POLICY "Anyone can view diseases" ON diseases
+  FOR SELECT USING (true);
+
+-- DISEASE_SYMPTOMS: Public read access
+CREATE POLICY "Anyone can view disease_symptoms" ON disease_symptoms
+  FOR SELECT USING (true);
+
 -- TEAM MEMBERS: Public read access
 CREATE POLICY "Anyone can view team members" ON team_members
   FOR SELECT USING (true);
@@ -279,6 +329,39 @@ ON CONFLICT DO NOTHING;
 INSERT INTO education_articles (title, content, category, author, read_time) VALUES
   ('Panduan Imunisasi Lengkap', 'Konten artikel imunisasi...', 'anak', 'Dr. Sari Wulandari, Sp.A', 8),
   ('Cegah Penyakit Jantung', 'Konten artikel jantung...', 'dewasa', 'Dr. Budi Santoso, Sp.JP', 6)
+ON CONFLICT DO NOTHING;
+
+-- Sample symptoms
+INSERT INTO symptoms (name, category, description) VALUES
+  ('Demam', 'umum', 'Peningkatan suhu tubuh di atas 37°C'),
+  ('Batuk', 'pernapasan', 'Refleks untuk membersihkan saluran pernapasan'),
+  ('Pilek', 'pernapasan', 'Keluarnya cairan dari hidung'),
+  ('Sakit Kepala', 'umum', 'Nyeri pada daerah kepala'),
+  ('Sakit Tenggorokan', 'pernapasan', 'Nyeri saat menelan'),
+  ('Nyeri Otot', 'otot', 'Rasa nyeri pada otot-otot tubuh'),
+  ('Kelelahan', 'umum', 'Rasa lelah dan kurang energi'),
+  ('Mual', 'pencernaan', 'Rasa ingin muntah'),
+  ('Diare', 'pencernaan', 'Buang air besar yang encer dan sering'),
+  ('Muntah', 'pencernaan', 'Pengeluaran isi perut melalui mulut')
+ON CONFLICT DO NOTHING;
+
+-- Sample diseases
+INSERT INTO diseases (name, description, recommendation, severity) VALUES
+  ('Flu Biasa', 'Infeksi virus yang menyerang sistem pernapasan', 'Istirahat, minum air putih, dan konsumsi vitamin C', 'mild'),
+  ('Pilek Alergi', 'Reaksi alergi yang menyebabkan pilek', 'Hindari pemicu alergi, gunakan antihistamin', 'mild'),
+  ('Faringitis', 'Peradangan pada faring atau tenggorokan', 'Istirahat, minum air hangat, berkumur dengan garam', 'moderate'),
+  ('Gastroenteritis', 'Peradangan pada lambung dan usus halus', 'Istirahat, minum cairan elektrolit, hindari makanan berat', 'moderate'),
+  ('Demam Berdarah', 'Infeksi virus yang ditularkan nyamuk Aedes', 'Segera konsultasi dokter, istirahat total', 'severe')
+ON CONFLICT DO NOTHING;
+
+-- Sample disease_symptoms (mapping)
+INSERT INTO disease_symptoms (disease_id, symptom_id)
+SELECT d.id, s.id FROM diseases d, symptoms s
+WHERE (d.name = 'Flu Biasa' AND s.name IN ('Demam', 'Batuk', 'Pilek', 'Sakit Kepala', 'Nyeri Otot', 'Kelelahan'))
+OR (d.name = 'Pilek Alergi' AND s.name IN ('Pilek', 'Sakit Kepala', 'Kelelahan'))
+OR (d.name = 'Faringitis' AND s.name IN ('Sakit Tenggorokan', 'Demam', 'Sakit Kepala', 'Nyeri Otot'))
+OR (d.name = 'Gastroenteritis' AND s.name IN ('Mual', 'Diare', 'Muntah', 'Demam', 'Kelelahan'))
+OR (d.name = 'Demam Berdarah' AND s.name IN ('Demam', 'Sakit Kepala', 'Nyeri Otot', 'Mual', 'Muntah'))
 ON CONFLICT DO NOTHING;
 
 -- Sample team members
