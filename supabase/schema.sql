@@ -319,11 +319,6 @@ CREATE TRIGGER update_family_members_updated_at BEFORE UPDATE ON family_members
 -- =====================================================
 
 -- Sample health facilities
-INSERT INTO health_facilities (name, type, address, phone, latitude, longitude, operating_hours, services, is_24h, rating) VALUES
-  ('RSUD Dr. Soetomo', 'hospital', 'Jl. Mayjen Prof. Dr. Moestopo 6-8, Surabaya', '(031) 5501001', -7.2685, 112.758, '24 Jam', ARRAY['IGD', 'Rawat Inap', 'Spesialis', 'Laboratorium', 'Radiologi'], true, 4.5),
-  ('Puskesmas Wonokromo', 'puskesmas', 'Jl. Wonokromo, Surabaya', '(031) 5678901', -7.3023, 112.7348, '08:00 - 16:00', ARRAY['Pemeriksaan Umum', 'Imunisasi', 'KIA', 'Laboratorium Dasar'], false, 4.0),
-  ('Apotek K24', 'pharmacy', 'Jl. Dharmahusada Indah Utara 45, Surabaya', '(031) 5917524', -7.276, 112.77, '24 Jam', ARRAY['Obat Bebas', 'Obat Resep', 'Konsultasi Farmasi'], true, 4.3)
-ON CONFLICT DO NOTHING;
 
 -- Sample education articles
 INSERT INTO education_articles (title, content, category, author, read_time) VALUES
